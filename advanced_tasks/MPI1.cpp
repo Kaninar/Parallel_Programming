@@ -1,14 +1,8 @@
 ﻿#include <mpi.h>
 #include <iostream>
-#include <locale>
-#include <windows.h>
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    setlocale(LC_ALL, "Russian");
-    SetConsoleOutputCP(1251);
-    SetConsoleCP(1251);
-
     int rank, size;
     int value;
     MPI_Status status;
@@ -34,7 +28,14 @@ int main(int argc, char* argv[]) {
             break;
         }
 
-        cout << "Proc " << rank << " received value " << value << endl;
+        for (int i = 0; i < size; i++) {
+            MPI_Barrier(MPI_COMM_WORLD);
+            if (rank == i) {
+                cout << "Proc " << rank << " received value " << value << endl;
+            }
+        }
+
+        MPI_Barrier(MPI_COMM_WORLD);
     }
 
     MPI_Finalize();
