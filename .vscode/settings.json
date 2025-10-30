@@ -74,5 +74,5 @@
         "py": "python",
         "memory_resource": "cpp",
         "string_view": "cpp"
-    }
+    },
 }

@@ -6,7 +6,7 @@
 
 const double a = 0;
 const double b = 10;
-const int n = 1000;
+const int n = 1000000;
 
 double trapezoidalIntegral(double a, double b, int n, const std::function<double(double)> &f)
 {
