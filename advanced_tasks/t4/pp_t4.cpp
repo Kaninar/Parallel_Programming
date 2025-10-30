@@ -33,7 +33,7 @@ int main()
     создаётся rows * cols итераций, которые распараллеливаются.
 */
 #pragma omp parallel for collapse(2)
-    for (int i = 0; i < rows; i++)
+    for (int i = 0; i < rows * cols; i++)
         for (int j = 0; j < cols; j++)
             a[i][j] = 1 + (rand() % 100);
     do

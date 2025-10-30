@@ -30,7 +30,7 @@ double *iter(double **a, double *y, int n)
 
     do
     {
-#pragma omp parallel for schedule(dynamic, 1)
+#pragma omp parallel for schedule(dynamic, 5)
         for (int i = 0; i < n; i++)
         {
             double sum = 0.0;
