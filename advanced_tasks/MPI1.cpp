@@ -1,5 +1,5 @@
-﻿#include <iostream>
-#include "mpi.h"
+﻿#include <mpi.h>
+#include <iostream>
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -25,9 +25,17 @@ int main(int argc, char *argv[])
 
         MPI_Recv(&value, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
 
-        cout << "Proc " << rank << " received value " << value << endl;
+        for (int i = 0; i < size; i++)
+        {
+            MPI_Barrier(MPI_COMM_WORLD);
+            if (rank == i)
+            {
+                cout << "Proc " << rank << " received value " << value << endl;
+            }
+        }
 
-    } while (true);
+        MPI_Barrier(MPI_COMM_WORLD);
+    }
 
     MPI_Finalize();
 
