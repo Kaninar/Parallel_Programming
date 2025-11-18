@@ -1,0 +1,55 @@
+Process 0:
+  Repeat  1: 0.023504900 s
+  Repeat  2: 0.029565100 s
+  Repeat  3: 0.015375600 s
+  Repeat  4: 0.014879500 s
+  Repeat  5: 0.010422900 s
+  Repeat  6: 0.015005900 s
+  Repeat  7: 0.014127200 s
+  Repeat  8: 0.015198300 s
+  Repeat  9: 0.014988900 s
+  Repeat 10: 0.015146900 s
+  Average: 0.016821520 s
+
+Process 1:
+  Repeat  1: 0.022935800 s
+  Repeat  2: 0.029628000 s
+  Repeat  3: 0.015176600 s
+  Repeat  4: 0.015140900 s
+  Repeat  5: 0.010259400 s
+  Repeat  6: 0.015056200 s
+  Repeat  7: 0.013405200 s
+  Repeat  8: 0.015211300 s
+  Repeat  9: 0.015086200 s
+  Repeat 10: 0.015091800 s
+  Average: 0.016699140 s
+
+Process 2:
+  Repeat  1: 0.023502600 s
+  Repeat  2: 0.029564800 s
+  Repeat  3: 0.015372900 s
+  Repeat  4: 0.014879700 s
+  Repeat  5: 0.010420100 s
+  Repeat  6: 0.015006000 s
+  Repeat  7: 0.014127500 s
+  Repeat  8: 0.015198000 s
+  Repeat  9: 0.014989900 s
+  Repeat 10: 0.015148000 s
+  Average: 0.016820950 s
+
+Process 3:
+  Repeat  1: 0.022955000 s
+  Repeat  2: 0.029626600 s
+  Repeat  3: 0.015176700 s
+  Repeat  4: 0.015138200 s
+  Repeat  5: 0.010259500 s
+  Repeat  6: 0.015056000 s
+  Repeat  7: 0.013405500 s
+  Repeat  8: 0.015207800 s
+  Repeat  9: 0.015085700 s
+  Repeat 10: 0.015089900 s
+  Average: 0.016700090 s
+
+Average send/recv time = 0.016760425 seconds (averaged across 4 processes)
+Message size = 8 bytes
+Iterations per process = 25000
