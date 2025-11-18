@@ -8,9 +8,10 @@ int main(int argc, char *argv[])
     // инициализация MPI
     MPI_Init(&argc, &argv);
 
-    int rank, size, buf[2];
-    MPI_Request reqs[4];
-    MPI_Status stats[4];
+    int rank, size; // rank — ранг (id) текущего процесса, size — общее число процессов
+    int buf[2]; // буфер для приема данных от соседних процессов
+    MPI_Request reqs[4]; // массив запросов для неблокирующих операций
+    MPI_Status stats[4]; // массив статусов для ожидания завершения операций
 
     // определение ранга текущего процесса
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -36,17 +37,21 @@ int main(int argc, char *argv[])
     // астрономическое время в секундах на момент начала процедуры
     double start_time = MPI_Wtime();
 
+    // неблокирующий прием данных от соседних процессов
     MPI_Irecv(&buf[0], 1, MPI_INT, prev, 5, MPI_COMM_WORLD, &reqs[0]);
     MPI_Irecv(&buf[1], 1, MPI_INT, next, 6, MPI_COMM_WORLD, &reqs[1]);
 
+	// неблокирующая отправка данных соседним процессам
     MPI_Isend(&rank, 1, MPI_INT, prev, 6, MPI_COMM_WORLD, &reqs[2]);
     MPI_Isend(&rank, 1, MPI_INT, next, 5, MPI_COMM_WORLD, &reqs[3]);
 
+	// ожидание завершения всех неблокирующих операций
     MPI_Waitall(4, reqs, stats);
 
     int local_sum = buf[0] + buf[1] + rank;
     int global_sum = 0;
 
+	// сбор значений local_sum от всех процессов в global_sum на всех процессах
     MPI_Allreduce(&local_sum, &global_sum, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
 
     // ожидание выполнения остальных процессов в указанном коммуникаторе
@@ -65,7 +70,8 @@ int main(int argc, char *argv[])
               << " sec" << std::endl;
 
     double total_time = 0.0;
-
+    
+    // сбор значений elapsed_time от всех процессов в total_time на процессе с рангом 0
     MPI_Reduce(&elapsed_time, &total_time, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
     if (rank == 0)
