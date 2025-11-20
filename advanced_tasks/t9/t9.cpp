@@ -6,48 +6,66 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    int n = 4, size;
+    int n = 4, m = 4;
+    int size;
     int rank;
 
     MPI_Status status;
     double matrix[n][n] = {0};
-    // cout << "text" << endl;
+    double matrixT[n][n] = {0};
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     double recieve[n] = {0};
     double resultmatrix[n][n] = {0};
 
-    int count = 0;
-    for (int i = 0; i < n; ++i)
+    // инициализация 2d матрицы
+    for (int i = 0, count = 0; i < n; ++i)
     {
-
-        for (int j = 0; j < n; ++j)
+        for (int j = 0; j < n; ++j, ++count)
         {
-            matrix[i][j] = count++;
+            matrix[i][j] = count;
         }
     }
 
+    // транспанирование матрицы
+#pragma omp parallel for collapse(2)
     for (int i = 0; i < n; ++i)
     {
         for (int j = i + 1; j < n; ++j)
         {
-            double temp1 = matrix[i][j];
-            matrix[i][j] = matrix[j][i];
-            matrix[j][i] = temp1;
+            matrixT[j][i] = matrix[i][j];
         }
     }
 
-    MPI_Scatter(matrix, n, MPI_DOUBLE, recieve, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    // MPI_Sendrecv(recieve, n, MPI_DOUBLE, 0, 0, recieve, n, MPI_DOUBLE, rank, 0, MPI_COMM_WORLD, &status);
-    // MPI_Gather(recieve, n, MPI_DOUBLE, resultmatrix, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-    //  }
-
+    double vector[n] = {0};
     for (int i = 0; i < n; ++i)
     {
-        printf("%g ", recieve[i]);
+        vector[i] = i;
     }
-    cout << "\n";
+
+    // распределение строк траспонированной матрицы по процессам
+    MPI_Scatter(matrix, n, MPI_DOUBLE, recieve, n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    // скалярное произведение векторов
+    double sum = 0;
+#pragma omp parallel for reduction(+ : sum)
+    for (int i = 0; i < n; ++i)
+    {
+        sum += recieve[i] * vector[i];
+    }
+
+    // сборка произведений из параллельных процессов
+    double result[n] = {0};
+    MPI_Gather(&sum, n / size, MPI_DOUBLE, result, n / size, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    if (!rank)
+    {
+        for (int i = 0; i < n; ++i)
+        {
+            printf("%g ", result[i]);
+        }
+    }
 
     MPI_Finalize();
 
