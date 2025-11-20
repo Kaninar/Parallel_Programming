@@ -22,9 +22,8 @@ int main(int argc, char *argv[])
     // инициализация 2d матрицы
     for (int i = 0, count = 0; i < n; ++i)
     {
-        for (int j = 0; j < n; ++j, ++count)
+        for (int j = 0; j < n; matrix[i][j] = count++, ++j)
         {
-            matrix[i][j] = count;
         }
     }
 
@@ -34,7 +33,9 @@ int main(int argc, char *argv[])
     {
         for (int j = i + 1; j < n; ++j)
         {
-            matrixT[j][i] = matrix[i][j];
+            double temp = matrix[j][i];
+            matrix[j][i] = matrix[i][j];
+            matrix[i][j] = temp;
         }
     }
 
